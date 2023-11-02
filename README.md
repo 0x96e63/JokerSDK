@@ -12,6 +12,11 @@ JokerSDK is a flexible and user-friendly Python library wrapping around [Joker](
 ## Requirements
  - Python >= 3.10
 
+## To do
+ - Fix type hints.
+ - Redo docs, add docs.
+ - Integrate callback class.
+
 Guide - How to install JokerSDK
 -------------------------------
 JokerSDK via PyPi:
