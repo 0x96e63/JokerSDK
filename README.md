@@ -31,7 +31,7 @@ $ python setup.py install
 JokerSDK - Usage
 ----------------
 
-Create an outbound call
+Create an outbound call.
 -----------------------
 ``` python
 import JokerAPI
@@ -44,7 +44,7 @@ call = JokerAPI.client.create_outbound_call(
 )
 ```
 
-Object attributes
+Object attributes.
 -----------------
 ```python
 import JokerAPI
@@ -96,7 +96,7 @@ call.play_text(
 )
 ```
 
-Gathering DTMF whilst playing Audio
+Gathering DTMF whilst playing Audio.
 -----------------------------------
 ``` python
 import JokerAPI
@@ -114,7 +114,7 @@ call.gather_dtmf_with_audio(
 )
 ```
 
-Gathering DTMF whilst playing Text
+Gathering DTMF whilst playing Text.
 ----------------------------------
 ``` python
 import JokerAPI
@@ -133,7 +133,7 @@ call.gather_dtmf_with_text(
 )
 ```
 
-Send DTMF tones
+Send DTMF tones.
 ---------------
 ``` python
 import JokerAPI
@@ -149,6 +149,16 @@ call.send_dtmf(
     input_ = "1234" # Digits to Send DTMF tones to Leg B(to) from.
 )
 ```
+
+Retrieve an session.
+--------------------
+``` python
+call = JokerAPI.client.retrieve(
+    apiKey = "<API_KEY>", # Your API Key, this can be found on site.
+    sid = "a_valid_sid" # A valid identifier in which to retrieve.
+)
+```
+Every object attribute & function from the `retrieve` class is interconnected with the `create_outbound_call` class.
 
 Finally, hang up the call.
 --------------------------
