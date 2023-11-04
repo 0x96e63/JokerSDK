@@ -171,6 +171,8 @@ call = JokerAPI.client.create_outbound_call(
     from_ = "1987654321", # The number to call `to` from.
     callbackUrl = "https://my.callbackserver.xyz/JokerSDK/callbacks" # A web server to send all callbacks to.
 )
+
+call.hangup()
 ```
 
 ## Contributing
