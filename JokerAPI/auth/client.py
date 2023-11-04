@@ -25,7 +25,7 @@ class create_outbound_call(outbound_calls):
     **kwargs > Required arguments to initiate a outbound call.
 
 
-    `self.sid`: list[bool]
+    `self._sid`: list[bool]
         > Index 0 boolean representing the status of the call (if it is live or not.)
     """
     def __init__(self, apiKey: str = "<API_KEY>", __retrieve__: bool = False, *args, **kwargs) -> None:
