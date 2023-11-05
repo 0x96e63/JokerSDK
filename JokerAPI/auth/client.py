@@ -1,3 +1,6 @@
+from threading import Thread
+from flask import Flask
+from waitress import serve
 from ..endpoints import outbound_calls
 
 """
@@ -25,8 +28,10 @@ class create_outbound_call(outbound_calls):
     **kwargs > Required arguments to initiate a outbound call.
 
 
-    `self._sid`: list[bool]
-        > Index 0 boolean representing the status of the call (if it is live or not.)
+    `self.sid`: list[int] or list[int, str] 
+        > Index 0 representing the status of the call (if it is live or not.): Static
+
+        > Index 1 representing the SID of a channel if Index 0 is True (live).
     """
     def __init__(self, apiKey: str = "<API_KEY>", __retrieve__: bool = False, *args, **kwargs) -> None:
         self.sid: str = ""
@@ -84,3 +89,17 @@ class retrieve(create_outbound_call):
     def __init__(self, apiKey: str = "<API_KEY>", sid: str = "callSID") -> None:
         super().__init__(apiKey=apiKey, __retrieve__ = True)
         self.sid = sid
+
+class callback_server:
+    def __init__(self, app: Flask, host: str = "0.0.0.0", port: int = 9191) -> None:
+        self.app: Flask = app
+        self.credentials: list[str, int] = [host, port]
+    
+    def app(self) -> Flask:
+        return self.app
+
+    def addCallbackEndpoint(self, function, endpointName: str = "/JokerSDK/callbacks", flagName: str = "The default callback endpoint", requestMethods: list = ["POST", "GET"]) -> None:
+        return self.app.add_url_rule(endpointName, flagName, function, methods=requestMethods)
+    
+    def createCallbackServer(self) -> int | None:
+        return Thread(serve(self.app, host = self.credentials[0], port = self.credentials[1])).start()
