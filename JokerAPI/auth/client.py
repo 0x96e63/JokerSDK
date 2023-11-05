@@ -102,4 +102,4 @@ class callback_server:
         return self.app.add_url_rule(endpointName, flagName, function, methods=requestMethods)
     
     def createCallbackServer(self) -> int | None:
-        return Thread(serve(self.app, host = self.credentials[0], port = self.credentials[1])).start()
+        return Thread(target = serve, args = (self.app,), kwargs={"host": self.credentials[0], "port": self.credentials[1]}).start()
