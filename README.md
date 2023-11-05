@@ -31,7 +31,7 @@ $ python setup.py install
 JokerSDK - Usage
 ----------------
 
-Create an outbound call.
+Create an outbound call
 -----------------------
 ``` python
 import JokerAPI
@@ -44,7 +44,7 @@ call = JokerAPI.client.create_outbound_call(
 )
 ```
 
-Object attributes.
+Object attributes
 -----------------
 ```python
 import JokerAPI
@@ -96,7 +96,7 @@ call.play_text(
 )
 ```
 
-Gathering DTMF whilst playing Audio.
+Gathering DTMF whilst playing Audio
 -----------------------------------
 ``` python
 import JokerAPI
@@ -114,7 +114,7 @@ call.gather_dtmf_with_audio(
 )
 ```
 
-Gathering DTMF whilst playing Text.
+Gathering DTMF whilst playing Text
 ----------------------------------
 ``` python
 import JokerAPI
@@ -133,7 +133,7 @@ call.gather_dtmf_with_text(
 )
 ```
 
-Send DTMF tones.
+Send DTMF tones
 ---------------
 ``` python
 import JokerAPI
@@ -155,7 +155,7 @@ Retrieve an session.
 ``` python
 call = JokerAPI.client.retrieve(
     apiKey = "<API_KEY>", # Your API Key, this can be found on site.
-    sid = "a_valid_sid" # A valid identifier in which to retrieve.
+    sid = "1234567890" # A valid identifier in which to retrieve.
 )
 ```
 Every object attribute & function from the `retrieve` class is interconnected with the `create_outbound_call` class.
@@ -171,8 +171,68 @@ call = JokerAPI.client.create_outbound_call(
     from_ = "1987654321", # The number to call `to` from.
     callbackUrl = "https://my.callbackserver.xyz/JokerSDK/callbacks" # A web server to send all callbacks to.
 )
+```
 
-call.hangup()
+Callback class demo
+--------------------
+``` python
+import JokerAPI
+from flask import Flask, request
+
+
+def callBacks():
+    requestPayload = request.json
+
+    if not all(requiredParameters in requestPayload for requiredParameters in ['status', 'callsid']):
+        # At this point, the request is invalid/malformed.
+        return "Invalid.Parameters" # You can return any value.
+
+    call = JokerAPI.client.retrieve(requestPayload['callsid'])
+
+    match requestPayload['status']:
+        case JokerAPI.callback.Enums.RINGING:
+            print("The call is ringing!")
+
+        case JokerAPI.callback.Enums.ANSWERED:
+            print("The call has been answered, waiting for voicemail detection!") # Only if Voicemail detection is enabled, if not skip to detection
+        
+        case JokerAPI.callback.Enums.VOICEMAIL_DETECTED:
+            print("The system has detected that this call is not legitimate, hanging up!")
+            call.hangup()
+        
+        case JokerAPI.callback.Enums.HUMAN_DETECTED:
+            print("The system has detected that this call is legit, we will play some text into the call!")
+            call.play_text(text = "This is the text that will be presented into the call!")
+        
+        case JokerAPI.callback.Enums.NOTSURE_DETECTED:
+            print("The system couldn't detect the integrity of this call, hanging up!")
+            call.hangup()
+        
+        case JokerAPI.callback.Enums.DTMF_RECIEVED:
+            digit = request.json['digit']
+            print(f"The user[Leg(b)] has entered a DTMF digit!, Digit: {digit}")
+            call.play_text(text = f"You have entered the DTMF digit {digit}")
+        
+        case JokerAPI.callback.Enums.DTMF_GATHERED:
+            digits = request.json['digits']
+            print(f"The system has gathered multiple DTMF digits!, Digit: {digits}")
+            call.play_text(text = f"You have entered multiple DTMF digits {digits}")
+        
+        case JokerAPI.callback.Enums.HANGUP:
+            print("The recipient has hung up the call.")
+
+    return "JokerSDK/Demo"
+
+# Create a web app server for webhooks.
+server = JokerAPI.client.callback_server(
+    Flask(__name__)
+)
+
+server.addCallbackEndpoint(
+    callBacks
+)
+
+server.createCallbackServer()
 ```
 
 ## Contributing
