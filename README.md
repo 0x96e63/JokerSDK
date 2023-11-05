@@ -187,7 +187,7 @@ def callBacks():
         # At this point, the request is invalid/malformed.
         return "Invalid.Parameters" # You can return any value.
 
-    call = JokerAPI.client.retrieve(requestPayload['callsid'])
+    call = JokerAPI.client.retrieve(apiKey = "API_KEY" sid = requestPayload['callsid'])
 
     match requestPayload['status']:
         case JokerAPI.callback.Enums.RINGING:
