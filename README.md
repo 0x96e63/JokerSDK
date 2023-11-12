@@ -1,4 +1,4 @@
-![image](https://github.com/0x96e63/JokerSDK/assets/71209712/0ca632c0-2f0b-4b9b-90fa-849909da1f00)JokerSDK
+JokerSDK
 ========
 JokerSDK is a flexible and user-friendly Python library wrapping around [Joker](https://jokerapi.co/)'s Voice API.
 
