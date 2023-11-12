@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="JokerSDK",
-    version="0.0.42",
+    version="0.0.43",
     author="0x96e63",
     description="A Simple SDK for Joker's Voice API.",
     long_description=open("README.md", "r", encoding="UTF-8").read(),
