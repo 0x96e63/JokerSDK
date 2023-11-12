@@ -9,7 +9,7 @@ class Enums(StrEnum):
     ENDED = "call.ended"
 
     DTMF_GATHERED = "dtmf.gathered"
-    DTMF_RECIEVED = "Single DTMF"
+    DTMF_RECIEVED = "dtmf.entered"
 
     VOICEMAIL_DETECTED = "machine.detected"
     HUMAN_DETECTED = "human.detected"
